@@ -1,0 +1,1 @@
+This is an RPG game called dragon repeller. Simple options to start off at the town but work your way up to defeating the dragon. Some interesting mechanis are involved related to weapon durability and easter eggs.
