@@ -1,5 +1,5 @@
 body {
-  background-color: darkblue;
+  /* background-color: darkblue; */
   font-size: 20px;
 }
 
@@ -47,4 +47,13 @@ body {
 
 .stat {
   padding-right: 10px;
+}
+
+.bgimage{
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
 }
