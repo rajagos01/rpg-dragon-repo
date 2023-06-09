@@ -104,6 +104,11 @@ const monsters = [
         name: "dragon",
         level: 20,
         health: 300
+    },
+    {
+        name: "Aconologia",
+        level: 200,
+        health: 4000
     }
 ];
 
@@ -200,7 +205,7 @@ function fightBeast(){
 
 function fightDragon(){
     console.log("Fighting Dragon");
-    fighting = 2;
+    fighting = (Math.random() > 0.9)? 3: 2;
     goFight();
 }
 
@@ -210,6 +215,8 @@ function goFight(){
     monsterStats.style.display = "block";
     monsterNameText.innerText = monsters[fighting].name;
     monsterHealthText.innerText = monsterHealth;
+    if (fighting === 3)
+        text.innerText = "Whoops you met Aconologia - the dark dragon";
 }
 
 function attack(){
