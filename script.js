@@ -87,6 +87,10 @@ const weapons = [
     {
         name: "excalibur",
         power: 500
+    },
+    {
+        name: "Staff of Ainz Ool Gown",
+        power: 1000
     }
 ];
 const monsters = [
@@ -128,38 +132,45 @@ function update(location){
 }
 
 function goTown(){
-    console.log("Going to town");
     update(locations[0]);
 }
 
 function goStore(){
-    console.log("Going to store");
     update(locations[1]);
+    if (Math.floor(gold/50) > 0){
+        button1.innerText = "Buy 50 health (50 gold)";        
+    }
 }
 
 function goCave(){
-    console.log("Going to Cave");
     update(locations[2]);
 }
 
 function buyHealth(){
-    console.log("buying Health");
-    if (gold>=10){
+    if (Math.floor(gold/50) > 0){
+        gold -= 50;
+        health += 50;
+        goldText.innerText = gold;
+        healthText.innerText = health;
+    }
+    else if (gold>=10){
         gold -= 10;
         health += 10;
         goldText.innerText = gold;
         healthText.innerText = health;
     }
     else{
-        console.log("Not enough gold!");
         text.innerText=notEnoughGold;
-    }        
+    }
+    // update button1 text to represent the right health
+    if (Math.floor(gold/50) === 0){
+        button1.innerText = "Buy 10 health (10 gold)";
+    }
 }
 
 function buyWeapon(){
     if (currentWeapon < weapons.length-1){
         if (gold>=30){
-            console.log("buying Weapon");
             gold -= 30;
             currentWeapon += 1;
             let newWeapon = weapons[currentWeapon].name;
@@ -169,7 +180,6 @@ function buyWeapon(){
             text.innerText += " In your inventory you have: " + inventory;
         }
         else{
-            console.log("Not enough gold to buy weapons");
             text.innerText = notEnoughGold;
         }
     }else{
@@ -192,20 +202,18 @@ function sellWeapon(){
 }
 
 function fightSlime(){
-    console.log("Fighting Slime");
     fighting = 0;
     goFight();
 }
 
 function fightBeast(){
-    console.log("Fighting Beast");
     fighting = 1;
     goFight();
 }
 
 function fightDragon(){
     console.log("Fighting Dragon");
-    fighting = (Math.random() > 0.9)? 3: 2;
+    fighting = (Math.random() > 0.9)? 3: 2; //10% chance of encountering the dark dragon
     goFight();
 }
 
@@ -220,11 +228,15 @@ function goFight(){
 }
 
 function attack(){
+    let userHitValue = 0;
+    let monsterHitValue = 0;
     text.innerText = "The " + monsters[fighting].name + " attacks.";
     text.innerText += " You attack it with your " + weapons[currentWeapon].name + ".";
-    health -= getMonsterAttackvalue(monsters[fighting].level);
+    monsterHitValue = getMonsterAttackvalue(monsters[fighting].level);
+    health -= monsterHitValue;
     if (isMonsterHit()){
-        monsterHealth -= weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;
+        userHitValue = getPlayerAttackValue(currentWeapon);
+        monsterHealth -= userHitValue;
     }
     else{
         text.innerText = "You swing and miss!";
@@ -232,9 +244,9 @@ function attack(){
     healthText.innerText = health;
     monsterHealthText.innerText = monsterHealth
     if (health <= 0){
-        lose();
+        lose(monsterHitValue);
     }else if (monsterHealth <=0) {
-        (fighting === 2) ? winGame():defeatMonster();
+        (fighting === 2) ? winGame(userHitValue):defeatMonster(userHitValue);
     }
     if ((Math.random() <= 0.1) && (inventory.length !== 1) && (currentWeapon != 4)){
         text.innerText = "Your weapon is broken. You lost " + inventory[currentWeapon] + ". ";
@@ -246,16 +258,18 @@ function dodge(){
     text.innerText = "You dodge the attack from the " + monsters[fighting].name + ".";
 }
 
-function lose(){
+function lose(monsterHitValue){    
     update(locations[5]);
+    text.innerText += " The monster hit you for " + monsterHitValue + " attack.";
 }
 
-function defeatMonster(){
+function defeatMonster(userHitValue){
     gold += Math.floor(monsters[fighting].level * 6.7);
     xp += monsters[fighting].level;
     goldText.innerText = gold;
-    xpText.innerText = xp;
+    xpText.innerText = xp;    
     update(locations[4]);
+    text.innerText += " You hit the monster for " + userHitValue + " attack points.";
 }
 
 function restart(){
@@ -272,15 +286,27 @@ function restart(){
     update(locations[0]);
 }
 
-function winGame(){
+function winGame(userHitValue){
     update(locations[6]);
+    text.innerText += " You hit the monster for " + userHitValue + " attack.";
 }
 
 function getMonsterAttackvalue(level){
-    console.log(level, xp);
+    console.log("level & xp are: ", level, xp);
     let hit = (level * 2) - (Math.floor(Math.random() * xp));
-    console.log(hit);
+    console.log("hit point is ",hit);
+    text.innerText += " The monster hits you for " + hit + " hit points.";
     return hit;
+}
+
+function getPlayerAttackValue(current_weapon){
+    let hitPoints = weapons[current_weapon].power + Math.floor(Math.random() * (xp/100)) + 1;
+    if (current_weapon === 5){
+        hitPoints += (Math.random()>0.8)? 8000 : 0;
+    }
+    console.log("Hit monster for ", hitPoints, " attack.");
+    text.innerText += "You hit the monster for " + hitPoints + " attack.";
+    return hitPoints;
 }
 
 function isMonsterHit(){
