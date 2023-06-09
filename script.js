@@ -127,38 +127,45 @@ function update(location){
 }
 
 function goTown(){
-    console.log("Going to town");
     update(locations[0]);
 }
 
 function goStore(){
-    console.log("Going to store");
     update(locations[1]);
+    if (Math.floor(gold/50) > 0){
+        button1.innerText = "Buy 50 health (50 gold)";        
+    }
 }
 
 function goCave(){
-    console.log("Going to Cave");
     update(locations[2]);
 }
 
 function buyHealth(){
-    console.log("buying Health");
-    if (gold>=10){
+    if (Math.floor(gold/50) > 0){
+        gold -= 50;
+        health += 50;
+        goldText.innerText = gold;
+        healthText.innerText = health;
+    }
+    else if (gold>=10){
         gold -= 10;
         health += 10;
         goldText.innerText = gold;
         healthText.innerText = health;
     }
     else{
-        console.log("Not enough gold!");
         text.innerText=notEnoughGold;
-    }        
+    }
+    // update button1 text to represent the right health
+    if (Math.floor(gold/50) === 0){
+        button1.innerText = "Buy 10 health (10 gold)";
+    }
 }
 
 function buyWeapon(){
     if (currentWeapon < weapons.length-1){
         if (gold>=30){
-            console.log("buying Weapon");
             gold -= 30;
             currentWeapon += 1;
             let newWeapon = weapons[currentWeapon].name;
@@ -168,7 +175,6 @@ function buyWeapon(){
             text.innerText += " In your inventory you have: " + inventory;
         }
         else{
-            console.log("Not enough gold to buy weapons");
             text.innerText = notEnoughGold;
         }
     }else{
@@ -191,19 +197,16 @@ function sellWeapon(){
 }
 
 function fightSlime(){
-    console.log("Fighting Slime");
     fighting = 0;
     goFight();
 }
 
 function fightBeast(){
-    console.log("Fighting Beast");
     fighting = 1;
     goFight();
 }
 
 function fightDragon(){
-    console.log("Fighting Dragon");
     fighting = 2;
     goFight();
 }
