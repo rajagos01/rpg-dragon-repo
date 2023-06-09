@@ -206,8 +206,6 @@ function fightBeast(){
 function fightDragon(){
     console.log("Fighting Dragon");
     fighting = (Math.random() > 0.9)? 3: 2;
-    if (fighting === 3)
-        console.log("Whoops you met Aconologia - the dark dragon");
     goFight();
 }
 
