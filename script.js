@@ -213,7 +213,7 @@ function fightBeast(){
 
 function fightDragon(){
     console.log("Fighting Dragon");
-    fighting = (Math.random() > 0.9)? 3: 2;
+    fighting = (Math.random() > 0.9)? 3: 2; //10% chance of encountering the dark dragon
     goFight();
 }
 
