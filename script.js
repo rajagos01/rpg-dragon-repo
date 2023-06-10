@@ -248,7 +248,7 @@ function attack(){
     }else if (monsterHealth <=0) {
         (fighting === 2) ? winGame(userHitValue):defeatMonster(userHitValue);
     }
-    if ((Math.random() <= 0.1) && (inventory.length !== 1) && (currentWeapon != 4)){
+    if ((Math.random() <= 0.1) && (inventory.length !== 1) && (currentWeapon != 5)){
         text.innerText = "Your weapon is broken. You lost " + inventory[currentWeapon] + ". ";
         inventory.pop(); currentWeapon--;
     }
